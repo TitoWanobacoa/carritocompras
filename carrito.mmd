@@ -1,0 +1,88 @@
+classDiagram
+    class Carrito {
+        -List~Item~ items
+        +agregarItem(Item item)
+        +eliminarItem(Item item)
+        +vaciarCarrito()
+        +calcularTotal(): float
+    }
+
+    class Item {
+        -Producto producto
+        -int cantidad
+        +calcularSubtotal(): float
+    }
+
+    class Producto {
+        -String nombre
+        -String descripcion
+        -float precio
+        -String categoria
+        -int stock
+        +actualizarStock(int cantidad)
+        +getNombre(): String
+        +getPrecio(): float
+    }
+
+    class Usuario {
+        -String nombre
+        -String email
+        -Carrito carrito
+        +registrar()
+        +iniciarSesion()
+        +agregarProducto(Producto producto, int cantidad)
+        +eliminarProducto(Producto producto)
+        +confirmarPedido()
+        +cerrarSesion()
+    }
+
+    class Pedido {
+        -String idPedido
+        -Carrito carrito
+        -String estado
+        -Direccion direccionEnvio
+        -Pago pago
+        +realizarPedido()
+        +cancelarPedido()
+        +consultarEstado(): String
+    }
+
+    class Direccion {
+        -String calle
+        -String ciudad
+        -String codigoPostal
+        -String pais
+        +getDireccionCompleta(): String
+    }
+
+    class Pago {
+        -float monto
+        -String metodo
+        -String estado
+        +realizarPago(): boolean
+        +reembolsar()
+    }
+
+    class ProductoDigital {
+        -String formato
+        +descargar(): void
+    }
+
+    class ProductoFisico {
+        -String dimensiones
+        -String peso
+        +enviar(): void
+    }
+
+    Producto <|-- ProductoDigital : hereda
+    Producto <|-- ProductoFisico : hereda
+
+    Carrito "1" *-- "0..*" Item : contiene
+    Item "1" --> "1" Producto : representa
+    Usuario "1" o-- "1" Carrito : posee
+    Usuario "1" o-- "0..*" Pedido : realiza
+    Pedido "1" *-- "1" Carrito : contiene
+    Pedido "1" --> "1" Direccion : envía a
+    Pedido "1" --> "1" Pago : asocia
+
+
